@@ -1,95 +1,9 @@
 import os.path
-import tkinter
 import re
-from tkinter import ttk
 from thonny.globals import get_workbench
 
-MAIN_BACKGROUND="#ededed"
-
-def theme_tweaker():
-    style = ttk.Style()
-    style.configure(".", background=MAIN_BACKGROUND)
-    style.configure("Toolbutton", borderwidth=1)
-    style.map("Toolbutton",
-              relief=[("disabled", "flat"),("hover", "groove"),("!hover", "flat")],
-              background=[("disabled",MAIN_BACKGROUND),("!hover", MAIN_BACKGROUND), ("hover", "#ffffff")])
-    style.configure("Treeview.Heading", relief="flat", borderwidth=1,
-                    background="#f0f0f0", foreground="#808080")
-    style.map("TNotebook.Tab", background=[("!selected", "#d0d0d0"), ("selected", MAIN_BACKGROUND)])
-    style.map("ButtonNotebook.Tab", background=[("!selected", "#d0d0d0"), ("selected", MAIN_BACKGROUND)])
-    for line in open (os.path.join (os.path.expanduser ("~"), ".config/lxsession/LXDE-pi/desktop.conf"), "r"):
-        if "sGtk/FontName" in line:
-            fontname = re.search (r"=([^0-9]*) ([0-9]*)", line, re.M).group(1)
-            fontsize = re.search (r"=([^0-9]*) ([0-9]*)", line, re.M).group(2)
-            if re.search (r'\bBold\b', fontname):
-                fontweight = "bold"
-                fontname = fontname.replace (" Bold", "")
-            else:
-                fontweight = "normal"
-            if re.search (r'\bItalic\b', fontname):
-                fontslant = "italic"
-                fontname = fontname.replace (" Italic", "")
-            else:
-                fontslant = "roman"
-    menfont=tkinter.font.nametofont("TkMenuFont")
-    menfont.configure(family=fontname)
-    menfont.configure(size=fontsize)
-    menfont.configure(weight=fontweight)
-    menfont.configure(slant=fontslant)
-    deffont=tkinter.font.nametofont("TkDefaultFont")
-    deffont.configure(family=fontname)
-    deffont.configure(size=fontsize)
-    deffont.configure(weight=fontweight)
-    deffont.configure(slant=fontslant)
-    headfont=tkinter.font.nametofont("TkHeadingFont")
-    headfont.configure(family=fontname)
-    headfont.configure(size=fontsize)
-    headfont.configure(weight=fontweight)
-    headfont.configure(slant=fontslant)
-
-
-def _running_on_pixel():
-    # TODO: find out
-    return True
-
-
-def load_early_plugin():
-    if not _running_on_pixel():
-        return
-    for line in open (os.path.join (os.path.expanduser ("~"), ".config/lxsession/LXDE-pi/desktop.conf"), "r"):
-        if "sGtk/ColorScheme" in line:
-            bgr = re.search (r"selected_bg_color:#([0-9a-fA-F]*)", line, re.M).group(1)
-            fgr = re.search (r"selected_fg_color:#([0-9a-fA-F]*)", line, re.M).group(1)
-            bg = "#" + bgr[0:2] + bgr[4:6] + bgr[8:10]
-            fg = "#" + fgr[0:2] + fgr[4:6] + fgr[8:10]
-
-    sd = get_workbench().set_default
-    # sto("window_icons", ["thonny.png"]) # not necessary, because it"s now included by default on Linux
-    sd("theme.preferred_theme", "clam")
-    sd("theme.main_background", MAIN_BACKGROUND)
-    sd("theme.menubar_options", {
-        "background" : MAIN_BACKGROUND,
-        "relief" : "flat",
-        "activebackground" : "#ffffff",
-        "activeborderwidth" : 0,
-        })
-    sd("theme.menu_options", {
-        "background" : "#ffffff",
-        "relief" : "flat",
-        "borderwidth" : 1,
-        "activeborderwidth" : 0,
-        "activebackground" : bg,
-        "activeforeground" : fg,
-        })
-    sd("theme.icons_in_menus", False)
-    sd("theme.shortcuts_in_tooltips", False)
-    sd("theme.tooltip_options",  {
-        "background" : "#808080",
-        "foreground" : "#ffffff",
-        "borderwidth" : 0,
-        "padx" : 10,
-        "pady" : 10
-        })
+def pi():
+    MAIN_BACKGROUND="#ededed"
 
     images = {
         "run.run_current_script.gif"    : "media-playback-start.png",
@@ -107,8 +21,120 @@ def load_early_plugin():
     }
 
     res_dir = os.path.join(os.path.dirname(__file__), "res")
-    for original in images:
-        get_workbench().map_image(original, os.path.join(res_dir, images[original]))
+    abs_images = {original : os.path.join(res_dir, images[original]) for original in images}
+    
+    settings = {
+        "." : {
+            "configure" : {
+                "background" : MAIN_BACKGROUND 
+            }
+        },
+        "Toolbutton" : {
+            "configure" : {
+                "borderwidth" : 1
+            },
+            "map" : {
+                "relief" : [("disabled", "flat"),
+                            ("hover", "groove"),
+                            ("!hover", "flat")],
+                
+                "background" : [("disabled",MAIN_BACKGROUND),
+                                ("!hover", MAIN_BACKGROUND),
+                                ("hover", "#ffffff")]
+            }
+        },
+        "Treeview.Heading" : {
+            "configure" : {
+                "background" : "#f0f0f0",
+                "foreground" : "#808080"
+            }
+        },
+        "TNotebook.Tab" : {
+            "map" : {
+                "background" : [("!selected", "#d0d0d0"), 
+                                ("selected", MAIN_BACKGROUND)],
+            }
+        },
+        "ButtonNotebook.Tab" : {
+            "map" : {
+                "background" : [("!selected", "#d0d0d0"), 
+                                ("selected", MAIN_BACKGROUND)],
+            }
+        },
+        "Menubar" : {
+            "configure" : {
+                "background" : MAIN_BACKGROUND,
+                "relief" : "flat",
+                "activebackground" : "#ffffff",
+                "activeborderwidth" : 0,
+            }
+        },
+        "Menu" : {
+            "configure" : {
+                "background" : "#ffffff",
+                "relief" : "flat",
+                "borderwidth" : 1,
+                "activeborderwidth" : 0,
+                #"activebackground" : bg, 
+                #"activeforeground" : fg, 
+            }
+        },
+        "Tooltip" : {
+            "configure" : {
+                "background" : "#808080",
+                "foreground" : "#ffffff",
+                "borderwidth" : 0,
+                "padx" : 10,
+                "pady" : 10
+            }
+        },
+        "OPTIONS" : {
+            "configure" : {
+                "icons_in_menus" : False,
+                "shortcuts_in_tooltips" : False
+            }
+        },
+        "IMAGES" : {
+            "configure" : abs_images
+        },
+    }
+    
+    # try to refine settings according to system configuration
+    configuration_path = os.path.expanduser ("~/.config/lxsession/LXDE-pi/desktop.conf")
+    if os.path.exists(configuration_path):
+        with open(configuration_path) as fp:
+            for line in fp:
+                if "sGtk/FontName" in line:
+                    fontname = re.search (r"=([^0-9]*) ([0-9]*)", line, re.M).group(1)  # @UndefinedVariable
+                    fontsize = re.search (r"=([^0-9]*) ([0-9]*)", line, re.M).group(2)  # @UndefinedVariable
+                    if re.search (r'\bBold\b', fontname):
+                        fontweight = "bold"
+                        fontname = fontname.replace (" Bold", "")
+                    else:
+                        fontweight = "normal"
+                    if re.search (r'\bItalic\b', fontname):
+                        fontslant = "italic"
+                        fontname = fontname.replace (" Italic", "")
+                    else:
+                        fontslant = "roman"
+                
+                    fontspec = {"family" : fontname, "size" : fontsize,
+                                "weight" : fontweight, "slant" : fontslant}
+                    settings["TkDefaultFont"] = {"config" : fontspec}
+                    settings["TkMenuFont"] =    {"config" : fontspec}
+                    settings["TkHeadingFont"] = {"config" : fontspec}
+                
+                elif "sGtk/ColorScheme" in line:
+                    bgr = re.search (r"selected_bg_color:#([0-9a-fA-F]*)", line, re.M).group(1)  # @UndefinedVariable
+                    fgr = re.search (r"selected_fg_color:#([0-9a-fA-F]*)", line, re.M).group(1)  # @UndefinedVariable
+                    settings["Menu"]["configure"]["activeforeground"] = "#" + fgr[0:2] + fgr[4:6] + fgr[8:10] 
+                    settings["Menu"]["configure"]["activebackground"] = "#" + bgr[0:2] + bgr[4:6] + bgr[8:10] 
+    
+    
+    return settings
+    
 
-    get_workbench().set_theme_tweaker(theme_tweaker)
+
+def load_early_plugin():
+    get_workbench().add_ui_theme("Raspberry Pi", "Enhanced Clam", pi)
 
