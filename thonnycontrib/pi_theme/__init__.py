@@ -46,7 +46,12 @@ def pi():
         "Treeview.Heading" : {
             "configure" : {
                 "background" : "#f0f0f0",
-                "foreground" : "#808080"
+                "foreground" : "#808080",
+                "relief" : "flat",
+                "borderwidth" : 1,
+            },
+            "map" : {
+                "foreground" : [("active", "black")]
             }
         },
         "TNotebook.Tab" : {
@@ -59,6 +64,50 @@ def pi():
             "map" : {
                 "background" : [("!selected", "#d0d0d0"), 
                                 ("selected", MAIN_BACKGROUND)],
+            }
+        },
+        "TScrollbar" : {
+            "configure" : {
+                "gripcount" : 0,
+                "borderwidth" : 0,
+                "relief" : "flat",
+                "background" : "#9b9d9e",
+                "darkcolor" : "#d6d6d6",
+                "lightcolor" : "#d6d6d6",
+                "bordercolor" : "#d6d6d6",
+                "troughcolor" : "#d6d6d6",
+                "arrowsize" : 11,
+                "arrowcolor" : "gray"
+            },
+            "map" : {
+                "background" : [],
+                "darkcolor" : [],
+                "lightcolor" : [],
+            }
+        },
+        "Vertical.TScrollbar" : {
+            # Remove scrollbar buttons/arrows:
+            "layout" : [
+                ('Vertical.Scrollbar.trough', {'sticky': 'ns', 'children': [
+                    ('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})
+                ]})
+            ]
+        },
+        
+        "Horizontal.TScrollbar" : {
+            # Remove scrollbar buttons/arrows:
+            "layout" : [
+                ('Horizontal.Scrollbar.trough', {'sticky': 'we', 'children': [
+                    ('Horizontal.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})
+                ]})
+            ],
+            "map" : {
+                # Make disabled Hor Scrollbar invisible
+                "background" : [("disabled", "#d6d6d6")],
+                "troughcolor" : [("disabled", "#d6d6d6")],
+                "bordercolor" : [("disabled", "#d6d6d6")],
+                "darkcolor" : [("disabled", "#d6d6d6")],
+                "lightcolor" : [("disabled", "#d6d6d6")],
             }
         },
         "Menubar" : {
