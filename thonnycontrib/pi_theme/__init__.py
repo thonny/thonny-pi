@@ -1,6 +1,6 @@
 import os.path
 import re
-from thonny.globals import get_workbench
+from thonny import get_workbench
 
 def pi():
     MAIN_BACKGROUND="#ededed"
@@ -23,6 +23,26 @@ def pi():
     res_dir = os.path.join(os.path.dirname(__file__), "res")
     abs_images = {original : os.path.join(res_dir, images[original]) for original in images}
     
+    scrollbar_button_settings = {}
+    for direction in ["up", "down", "left", "right"]:
+        # load the image
+        element_name = "scrollbar-button-" + direction
+        for suffix in ["", "-insens"]:
+            img_name = element_name + suffix
+            get_workbench().get_image(os.path.join(res_dir, img_name + ".png"), img_name)
+        
+        scrollbar_button_settings[element_name] = {
+            "element create" : (
+                "image", element_name,
+                ("!disabled", element_name),
+                ("disabled", element_name + "-insens"),
+            )
+        }
+    
+    from tkinter import ttk
+    print(ttk.Style().element_names())
+    print(ttk.Style().element_options("padding"))
+    print(ttk.Style().element_options("border"))
     settings = {
         "." : {
             "configure" : {
@@ -70,14 +90,15 @@ def pi():
             "configure" : {
                 "gripcount" : 0,
                 "borderwidth" : 0,
-                "relief" : "flat",
-                "background" : "#9b9d9e",
+                "padding" : 1,
+                "relief" : "solid",
+                "background" : "#9e9e9e",
                 "darkcolor" : "#d6d6d6",
                 "lightcolor" : "#d6d6d6",
                 "bordercolor" : "#d6d6d6",
                 "troughcolor" : "#d6d6d6",
-                "arrowsize" : 11,
-                "arrowcolor" : "gray"
+                "arrowsize" : 1,
+                "arrowcolor" : "gray",
             },
             "map" : {
                 "background" : [],
@@ -86,19 +107,25 @@ def pi():
             }
         },
         "Vertical.TScrollbar" : {
-            # Remove scrollbar buttons/arrows:
             "layout" : [
                 ('Vertical.Scrollbar.trough', {'sticky': 'ns', 'children': [
-                    ('Vertical.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})
+                    ('scrollbar-button-up', {'side': 'top', 'sticky': ''}), 
+                    ('scrollbar-button-down', {'side': 'bottom', 'sticky': ''}), 
+                    ("Vertical.Scrollbar.padding", {'sticky' : 'nswe', 'children' : [
+                        ('Vertical.Scrollbar.thumb', {'expand' : 1, 'sticky': 'nswe'}),
+                    ]}),
                 ]})
             ]
         },
         
         "Horizontal.TScrollbar" : {
-            # Remove scrollbar buttons/arrows:
             "layout" : [
                 ('Horizontal.Scrollbar.trough', {'sticky': 'we', 'children': [
-                    ('Horizontal.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})
+                    ('scrollbar-button-left', {'side': 'left', 'sticky': ''}), 
+                    ('scrollbar-button-right', {'side': 'right', 'sticky': ''}), 
+                    ("Horizontal.Scrollbar.padding", {'sticky' : 'nswe', 'children' : [
+                        ('Horizontal.Scrollbar.thumb', {'expand': '1', 'sticky': 'nswe'})
+                    ]}),
                 ]})
             ],
             "map" : {
@@ -148,6 +175,8 @@ def pi():
         },
     }
     
+    settings.update(scrollbar_button_settings)
+    
     # try to refine settings according to system configuration
     configuration_path = os.path.expanduser ("~/.config/lxsession/LXDE-pi/desktop.conf")
     if os.path.exists(configuration_path):
@@ -184,6 +213,7 @@ def pi():
     
 
 
-def load_early_plugin():
+def load_plugin():
     get_workbench().add_ui_theme("Raspberry Pi", "Enhanced Clam", pi)
+    get_workbench().set_default("view.ui_theme", "Raspberry Pi")
 
