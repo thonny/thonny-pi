@@ -244,4 +244,6 @@ def load_plugin():
     get_workbench().update_image_mapping(global_image_map)
     get_workbench().add_ui_theme("Raspberry Pi", "Enhanced Clam", pix, theme_image_map)
     get_workbench().set_default("view.ui_theme", "Raspberry Pi")
+    
+    get_workbench().set_default("run.backend_name", "SameAsFrontend")
 
