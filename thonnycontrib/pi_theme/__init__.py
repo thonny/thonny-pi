@@ -3,7 +3,7 @@ import re
 from thonny import get_workbench
 from thonny.ui_utils import scale
 
-CONFIGURATION_PATH = "~/.config/lxsession/LXDE-pi/desktop.conf"
+CONFIGURATION_PATH = os.path.expanduser("~/.config/lxsession/LXDE-pi/desktop.conf")
 
 def pix():
     MAIN_BACKGROUND="#ededed"
