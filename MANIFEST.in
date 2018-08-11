@@ -1,0 +1,6 @@
+include README.rst
+include LICENSE.txt
+recursive-include thonnycontrib *.py
+recursive-include thonnycontrib *.png
+global-exclude __pycache__
+global-exclude *.py[co]
