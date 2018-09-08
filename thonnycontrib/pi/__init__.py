@@ -228,6 +228,7 @@ def load_plugin():
         "run-to-cursor"        : "debug-run-cursor.png",
         "tab-close"            : 'window-close.png',
         "tab-close-active"     : "window-close-act.png",
+        "resume"               : "resume.png",
     }
 
     res_dir = os.path.join(os.path.dirname(__file__), "res")
