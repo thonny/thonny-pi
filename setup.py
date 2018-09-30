@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup (
         name="thonny-pi",
-        version="1.0b2",
+        version="1.0",
         description="Raspberry Pi customizations for Thonny IDE",
         long_description="""Thonny plug-in which adds Raspberry Pi theme and sets Rasberry specific defaults. More info about Thonny: https://thonny.org.""",
         url="https://bitbucket.org/plas/thonny-pi/",
