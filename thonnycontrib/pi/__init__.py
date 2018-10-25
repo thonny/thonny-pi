@@ -1,9 +1,10 @@
-import os.path
+import os
 import re
 from thonny import get_workbench
 from thonny.ui_utils import scale
 
-CONFIGURATION_PATH = os.path.expanduser("~/.config/lxsession/LXDE-pi/desktop.conf")
+CONFIGURATION_PATH = os.path.join (os.path.expanduser ("~"), ".config/lxsession", os.environ['DESKTOP_SESSION'], "desktop.conf")
+GLOBAL_CONFIGURATION_PATH = os.path.join ("/etc/xdg/lxsession", os.environ['DESKTOP_SESSION'], "desktop.conf")
 
 def pix():
     MAIN_BACKGROUND="#ededed"
@@ -173,6 +174,14 @@ def pix():
     settings.update(scrollbar_button_settings)
     
     # try to refine settings according to system configuration
+    if os.path.exists(GLOBAL_CONFIGURATION_PATH):
+        with open(GLOBAL_CONFIGURATION_PATH) as fp:
+            for line in fp:
+                if "sGtk/ColorScheme" in line:
+                    bgr = re.search (r"selected_bg_color:#([0-9a-fA-F]*)", line, re.M).group(1)  # @UndefinedVariable
+                    fgr = re.search (r"selected_fg_color:#([0-9a-fA-F]*)", line, re.M).group(1)  # @UndefinedVariable
+                    settings["Menu"]["configure"]["activeforeground"] = "#" + fgr[0:2] + fgr[4:6] + fgr[8:10] 
+                    settings["Menu"]["configure"]["activebackground"] = "#" + bgr[0:2] + bgr[4:6] + bgr[8:10]
     if os.path.exists(CONFIGURATION_PATH):
         with open(CONFIGURATION_PATH) as fp:
             for line in fp:
@@ -185,29 +194,49 @@ def pix():
     return settings 
 
 def update_fonts():
-    if not os.path.exists(CONFIGURATION_PATH):
-        return
+    if os.path.exists(GLOBAL_CONFIGURATION_PATH):
+        with open(GLOBAL_CONFIGURATION_PATH) as fp:
+            for line in fp:
+                if "sGtk/FontName" in line:
+                    fontname = re.search(r"=([^0-9]*) ([0-9]*)", line, re.M).group(1)  # @UndefinedVariable
+                    fontsize = re.search(r"=([^0-9]*) ([0-9]*)", line, re.M).group(2)  # @UndefinedVariable
+                    if re.search(r'\bBold\b', fontname):
+                        fontweight = "bold"
+                        fontname = fontname.replace(" Bold", "")
+                    else:
+                        fontweight = "normal"
+                    if re.search(r'\bItalic\b', fontname):
+                        fontslant = "italic"
+                        fontname = fontname.replace(" Italic", "")
+                    else:
+                        fontslant = "roman"
+                    
+                    from tkinter import font
+                    for name in ["TkDefaultFont", "TkMenuFont", "TkHeadingFont"]:
+                        font.nametofont(name).configure(family=fontname, size=fontsize,
+                                                        weight=fontweight, slant=fontslant)
     
-    with open(CONFIGURATION_PATH) as fp:
-        for line in fp:
-            if "sGtk/FontName" in line:
-                fontname = re.search(r"=([^0-9]*) ([0-9]*)", line, re.M).group(1)  # @UndefinedVariable
-                fontsize = re.search(r"=([^0-9]*) ([0-9]*)", line, re.M).group(2)  # @UndefinedVariable
-                if re.search(r'\bBold\b', fontname):
-                    fontweight = "bold"
-                    fontname = fontname.replace(" Bold", "")
-                else:
-                    fontweight = "normal"
-                if re.search(r'\bItalic\b', fontname):
-                    fontslant = "italic"
-                    fontname = fontname.replace(" Italic", "")
-                else:
-                    fontslant = "roman"
-                
-                from tkinter import font
-                for name in ["TkDefaultFont", "TkMenuFont", "TkHeadingFont"]:
-                    font.nametofont(name).configure(family=fontname, size=fontsize,
-                                                    weight=fontweight, slant=fontslant)
+    if os.path.exists(CONFIGURATION_PATH):
+        with open(CONFIGURATION_PATH) as fp:
+            for line in fp:
+                if "sGtk/FontName" in line:
+                    fontname = re.search(r"=([^0-9]*) ([0-9]*)", line, re.M).group(1)  # @UndefinedVariable
+                    fontsize = re.search(r"=([^0-9]*) ([0-9]*)", line, re.M).group(2)  # @UndefinedVariable
+                    if re.search(r'\bBold\b', fontname):
+                        fontweight = "bold"
+                        fontname = fontname.replace(" Bold", "")
+                    else:
+                        fontweight = "normal"
+                    if re.search(r'\bItalic\b', fontname):
+                        fontslant = "italic"
+                        fontname = fontname.replace(" Italic", "")
+                    else:
+                        fontslant = "roman"
+                    
+                    from tkinter import font
+                    for name in ["TkDefaultFont", "TkMenuFont", "TkHeadingFont"]:
+                        font.nametofont(name).configure(family=fontname, size=fontsize,
+                                                        weight=fontweight, slant=fontslant)
                     
 def load_plugin():
     """Note that fonts and some images are set globally, 
