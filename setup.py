@@ -4,7 +4,7 @@ setup (
         name="thonny-pi",
         version="1.1",
         description="Raspberry Pi customizations for Thonny IDE",
-        long_description="""Thonny plug-in which adds Raspberry Pi theme and sets Raspberry specific defaults. More info about Thonny: https://thonny.org.""",
+        long_description="""Thonny plug-in which adds Raspberry Pi theme and sets Rasberry specific defaults. More info about Thonny: https://thonny.org.""",
         url="https://bitbucket.org/plas/thonny-pi/",
         author="Aivar Annamaa",
         author_email="aivar.annamaa@gmail.com",
