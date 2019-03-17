@@ -3,8 +3,10 @@ import re
 from thonny import get_workbench
 from thonny.ui_utils import scale
 
-CONFIGURATION_PATH = os.path.join (os.path.expanduser ("~"), ".config/lxsession", os.environ['DESKTOP_SESSION'], "desktop.conf")
-GLOBAL_CONFIGURATION_PATH = os.path.join ("/etc/xdg/lxsession", os.environ['DESKTOP_SESSION'], "desktop.conf")
+DESKTOP_SESSION = os.environ.get('DESKTOP_SESSION', "_")
+CONFIGURATION_PATH = os.path.join(os.path.expanduser ("~"),
+                                  ".config/lxsession", DESKTOP_SESSION,"desktop.conf")
+GLOBAL_CONFIGURATION_PATH = os.path.join ("/etc/xdg/lxsession", DESKTOP_SESSION, "desktop.conf")
 
 def pix():
     MAIN_BACKGROUND="#ededed"
