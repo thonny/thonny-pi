@@ -176,6 +176,10 @@ def pix():
     settings.update(scrollbar_button_settings)
     
     # try to refine settings according to system configuration
+    """Note that fonts are set globally, 
+    ie. all themes will later inherit these"""
+    update_fonts()
+    
     if os.path.exists(GLOBAL_CONFIGURATION_PATH):
         with open(GLOBAL_CONFIGURATION_PATH) as fp:
             for line in fp:
@@ -198,6 +202,11 @@ def pix():
                         settings["Menu"]["configure"]["activeforeground"] = "#" + fgr[0:2] + fgr[4:6] + fgr[8:10] 
     
     return settings 
+
+def pix_dark():
+    update_fonts()
+    return {}
+
 
 def update_fonts():
     from tkinter import font
@@ -244,9 +253,6 @@ def update_fonts():
                                                         weight=fontweight, slant=fontslant)
                     
 def load_plugin():
-    """Note that fonts are set globally, 
-    ie. all themes will inherit these"""
-    update_fonts()
     
     # set custom images
     if get_workbench().get_ui_mode() == "simple":
@@ -292,5 +298,5 @@ def load_plugin():
         theme_image_map[image] = os.path.join(res_dir, images[image])
     
     get_workbench().add_ui_theme("Raspberry Pi", "Enhanced Clam", pix, theme_image_map)
-    get_workbench().add_ui_theme("Raspberry Pi Dark", "Clean Dark", {}, theme_image_map)
+    get_workbench().add_ui_theme("Raspberry Pi Dark", "Clean Dark", pix_dark, theme_image_map)
 
