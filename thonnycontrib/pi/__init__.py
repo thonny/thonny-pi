@@ -200,6 +200,7 @@ def pix():
     return settings 
 
 def update_fonts():
+    from tkinter import font
     if os.path.exists(GLOBAL_CONFIGURATION_PATH):
         with open(GLOBAL_CONFIGURATION_PATH) as fp:
             for line in fp:
@@ -217,7 +218,6 @@ def update_fonts():
                     else:
                         fontslant = "roman"
                     
-                    from tkinter import font
                     for name in ["TkDefaultFont", "TkMenuFont", "TkHeadingFont"]:
                         font.nametofont(name).configure(family=fontname, size=fontsize,
                                                         weight=fontweight, slant=fontslant)
@@ -239,13 +239,12 @@ def update_fonts():
                     else:
                         fontslant = "roman"
                     
-                    from tkinter import font
                     for name in ["TkDefaultFont", "TkMenuFont", "TkHeadingFont"]:
                         font.nametofont(name).configure(family=fontname, size=fontsize,
                                                         weight=fontweight, slant=fontslant)
                     
 def load_plugin():
-    """Note that fonts and some images are set globally, 
+    """Note that fonts are set globally, 
     ie. all themes will inherit these"""
     update_fonts()
     
@@ -288,18 +287,10 @@ def load_plugin():
         }
 
     res_dir = os.path.join(os.path.dirname(__file__), "res")
-    global_image_map = {}
     theme_image_map = {}
     for image in images:
-        if image in ["tab-close", "tab-close-active"]:
-            target = theme_image_map
-        else:
-            target = global_image_map
-        
-        target[image] = os.path.join(res_dir, images[image])
+        theme_image_map[image] = os.path.join(res_dir, images[image])
     
-    get_workbench().update_image_mapping(global_image_map)
     get_workbench().add_ui_theme("Raspberry Pi", "Enhanced Clam", pix, theme_image_map)
-    get_workbench().set_default("view.ui_theme", "Raspberry Pi")
-    get_workbench().set_default("general.ui_mode", "simple")
+    get_workbench().add_ui_theme("Raspberry Pi Dark", "Clean Dark", {}, theme_image_map)
 
