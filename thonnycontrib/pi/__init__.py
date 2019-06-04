@@ -255,7 +255,7 @@ def update_fonts():
 def load_plugin():
     
     # set custom images
-    if get_workbench().get_ui_mode() == "simple":
+    if get_workbench().get_ui_mode() == "simple" and get_workbench().winfo_screenwidth() >= 1280:
         images = {
             "run-current-script"   : "media-playback-start48.png",
             "stop"                 : "process-stop48.png",
