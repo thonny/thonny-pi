@@ -2,9 +2,12 @@ from setuptools import setup
 
 setup (
         name="thonny-pi",
-        version="1.4",
+        version="1.5",
         description="Raspberry Pi customizations for Thonny IDE",
-        long_description="""Thonny plug-in which adds Raspberry Pi theme. More info about Thonny: https://thonny.org.""",
+        long_description="""Thonny plug-in which adds Raspberry Pi theme.
+More info about Thonny: https://thonny.org.
+
+NB! This plug-in is only relevant for Thonny 3.0 and 3.1. In later versions this functionality is included in main package.""",
         url="https://github.com/thonny/thonny-pi/",
         author="Aivar Annamaa",
         author_email="aivar.annamaa@gmail.com",
@@ -37,6 +40,6 @@ setup (
         platforms=["Windows", "macOS", "Linux"],
         python_requires=">=3.5",
         package_data={'thonnycontrib.pi': ['res/*']},
-        install_requires=["thonny>=3.0.0"],
+        install_requires=["thonny >= 3.0.0, < 3.2.*"],
         packages=["thonnycontrib.pi"],
 )
