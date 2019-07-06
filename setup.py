@@ -7,7 +7,7 @@ setup (
         long_description="""Thonny plug-in which adds Raspberry Pi theme.
 More info about Thonny: https://thonny.org.
 
-NB! This plug-in is only relevant for Thonny 3.0 and 3.1. In later versions this functionality is included in main package.""",
+NB! This plug-in is only relevant for Thonny 3.0 and 3.1. In later versions this functionality is included in the main package.""",
         url="https://github.com/thonny/thonny-pi/",
         author="Aivar Annamaa",
         author_email="aivar.annamaa@gmail.com",
